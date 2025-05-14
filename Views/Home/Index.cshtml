@@ -1,8 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@{
+    var hangmanGame = ViewBag.game;
+    char[] alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+}
+
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @hangmanGame.DisplayedText
+    @if (!hangmanGame.GameActive)
+    {
+        <a class="btn" asp-controller="Home" asp-action="NewGame">New Game</a>
+    }
+    else
+    {
+        for (var i = 0; i < alphabet.Length; i++)
+        {
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Guess" asp-route-guessedLetter="@alphabet[i]" asp-route-hangmanGame="@hangmanGame">@alphabet[i]</a>
+        }
+    }
+    <p>@hangmanGame.Word</p>
 </div>

@@ -6,16 +6,36 @@ namespace PrestonFitzgeraldCodeChallenge.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private playGame gameControls;
+        private hangmanGame hangmanGame;
+
+        public HomeController()
         {
-            _logger = logger;
         }
 
         public IActionResult Index()
         {
+            if (hangmanGame == null)
+            {
+                hangmanGame = new hangmanGame();
+            }
+            ViewBag.game = hangmanGame;
             return View();
+        }
+
+        public IActionResult NewGame()
+        {
+            hangmanGame = playGame.newGame();
+            ViewBag.game = hangmanGame;
+
+            return View("Index");
+        }
+
+        public IActionResult Guess(char guessedLetter, hangmanGame hangmanGame)
+        {
+            ViewBag.game = hangmanGame;
+            return View("Index");
         }
 
         public IActionResult Privacy()
@@ -23,10 +43,5 @@ namespace PrestonFitzgeraldCodeChallenge.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
